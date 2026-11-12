@@ -1,5 +1,6 @@
 package dev.tiny.launcher
 
+import android.appwidget.AppWidgetHost
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,13 +13,27 @@ class MainActivity : ComponentActivity() {
     // One event each time Home is pressed while we are already on the home screen.
     private val homePresses = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
+    private lateinit var appWidgetHost: AppWidgetHost
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        appWidgetHost = AppWidgetHost(this, HOST_ID)
         setContent {
             AskToBeHome()
-            TinyHome(homePresses)
+            TinyHome(homePresses, appWidgetHost)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Widget updates only arrive while we listen: listen while the launcher is visible.
+        appWidgetHost.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        appWidgetHost.stopListening()
     }
 
     // singleTask: there is only one instance of this activity, so a Home press

@@ -1,5 +1,6 @@
 package dev.tiny.launcher
 
+import android.appwidget.AppWidgetHost
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.Column
@@ -31,7 +32,7 @@ import kotlinx.coroutines.flow.Flow
 private val clockFormat = DateTimeFormatter.ofPattern("HH:mm")
 
 @Composable
-fun TinyHome(homePresses: Flow<Unit>) {
+fun TinyHome(homePresses: Flow<Unit>, widgetHost: AppWidgetHost) {
     val context = LocalContext.current
 
     // Collected with the lifecycle: nothing stays registered while the launcher is hidden.
@@ -47,7 +48,8 @@ fun TinyHome(homePresses: Flow<Unit>) {
         modifier = Modifier.fillMaxSize().safeDrawingPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Clock(now, homePresses, Modifier.padding(vertical = 48.dp))
+        Clock(now, homePresses, Modifier.padding(vertical = 32.dp))
+        WidgetSlot(widgetHost)
         TextButton(onClick = { iconStyle = iconStyle.next() }) {
             Text("Icons: ${iconStyle.name}", color = Color.White)
         }

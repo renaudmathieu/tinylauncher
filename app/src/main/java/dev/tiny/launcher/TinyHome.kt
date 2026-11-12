@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -34,6 +38,8 @@ fun TinyHome(homePresses: Flow<Unit>) {
     val now by remember { context.clockTicks() }.collectAsStateWithLifecycle(LocalTime.now())
     val apps by remember { context.installedApps() }.collectAsStateWithLifecycle(emptyList())
 
+    var iconStyle by rememberSaveable { mutableStateOf(IconStyle.Circle) }
+
     // Home is the root of the phone: Back has nowhere to go.
     BackHandler {}
 
@@ -42,7 +48,10 @@ fun TinyHome(homePresses: Flow<Unit>) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Clock(now, homePresses, Modifier.padding(vertical = 48.dp))
-        AppDrawer(apps, Modifier.fillMaxWidth().weight(1f))
+        TextButton(onClick = { iconStyle = iconStyle.next() }) {
+            Text("Icons: ${iconStyle.name}", color = Color.White)
+        }
+        AppDrawer(apps, iconStyle, Modifier.fillMaxWidth().weight(1f))
     }
 }
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlinx.coroutines.flow.Flow
@@ -28,10 +30,9 @@ private val clockFormat = DateTimeFormatter.ofPattern("HH:mm")
 fun TinyHome(homePresses: Flow<Unit>) {
     val context = LocalContext.current
 
-    // Known bug, on purpose: the time is read once, so the clock is frozen. Fixed in cp-3.
-    val now = remember { LocalTime.now() }
-    // Known bug, on purpose: the apps are loaded once, so a new app never shows up. Fixed in cp-3.
-    val apps = remember { context.loadApps() }
+    // Collected with the lifecycle: nothing stays registered while the launcher is hidden.
+    val now by remember { context.clockTicks() }.collectAsStateWithLifecycle(LocalTime.now())
+    val apps by remember { context.installedApps() }.collectAsStateWithLifecycle(emptyList())
 
     // Home is the root of the phone: Back has nowhere to go.
     BackHandler {}

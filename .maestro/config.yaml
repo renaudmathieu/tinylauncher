@@ -1,0 +1,12 @@
+# Tiny Launcher Maestro suite (targets cp-5)
+# Run with ./scripts/maestro-test.sh, it makes Tiny Launcher the home app first.
+flows:
+  - "*.yaml"
+executionOrder:
+  continueOnFailure: true
+  flowsOrder:
+    - "cp-1 Home: Tiny Launcher answers the Home button"
+    - "cp-2 Drawer: every launchable app is listed and launches"
+    - "cp-3 Sync: the clock follows TIME_TICK"
+    - "cp-4 Icons: the shape switcher cycles through every mask"
+    - "cp-5 Widgets: pick, bind and host a widget"

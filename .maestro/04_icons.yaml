@@ -1,0 +1,13 @@
+appId: dev.tiny.launcher
+name: "cp-4 Icons: the shape switcher cycles through every mask"
+tags:
+  - cp-4
+---
+- runFlow: subflows/open_home.yaml
+- tapOn: "Icons: Circle"
+- tapOn: "Icons: Squircle"
+- tapOn: "Icons: Rounded"
+- tapOn: "Icons: Themed"
+- assertVisible: "Icons: Circle"
+# Apps still launch whatever the mask
+- assertVisible: "Settings"

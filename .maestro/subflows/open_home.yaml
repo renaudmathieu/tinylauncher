@@ -1,0 +1,11 @@
+appId: dev.tiny.launcher
+---
+# Kill the launcher and press Home: the system restarts it once, with a fresh state.
+# (launchApp would race with the system, which restarts the home activity on its own.)
+- stopApp
+- pressKey: Home
+- extendedWaitUntil:
+    visible: "Icons: .*"
+    timeout: 10000
+    label: "Tiny Launcher is the home app (run ./scripts/maestro-test.sh to set it)"
+- waitForAnimationToEnd

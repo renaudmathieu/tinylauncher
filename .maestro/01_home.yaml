@@ -1,0 +1,21 @@
+appId: dev.tiny.launcher
+name: "cp-1 Home: Tiny Launcher answers the Home button"
+tags:
+  - cp-1
+---
+- runFlow: subflows/open_home.yaml
+
+# Leave home, then press Home: the system fires MAIN + HOME and we come back
+- launchApp:
+    appId: com.android.settings
+- assertNotVisible: "Icons: .*"
+- pressKey: Home
+- assertVisible: "Icons: .*"
+
+# Second Home press while already home: onNewIntent, still the same screen
+- pressKey: Home
+- assertVisible: "Icons: .*"
+
+# Back on the home root goes nowhere
+- back
+- assertVisible: "Icons: .*"

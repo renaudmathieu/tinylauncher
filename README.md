@@ -3,6 +3,10 @@
 A tiny Android home screen built step by step for the talk
 *Building my own Android launcher (and rediscovering Android basics along the way)*.
 
+<p align="center">
+  <img src="docs/screenshot.png" alt="Tiny Launcher at cp-5: live clock, hosted calendar widget and squircle app icons" width="300">
+</p>
+
 Each checkpoint is a git tag. Play the game yourself:
 
 ```bash
@@ -27,3 +31,17 @@ adb shell input keyevent KEYCODE_HOME
 ```
 
 Requirements: Android Studio with SDK 37, minSdk 26.
+
+## UI tests (Maestro)
+
+The `.maestro` suite checks one feature per checkpoint against the final app (`cp-5`).
+With a device or emulator connected:
+
+```bash
+./scripts/maestro-test.sh                      # full suite, about 1 min 30 s
+./scripts/maestro-test.sh --exclude-tags slow  # skip the one-minute clock tick
+./scripts/maestro-test.sh -e WIDGET="Chrome Dino"
+```
+
+The script installs the debug build and makes Tiny Launcher the home app before running the flows.
+Each flow restarts the launcher with `stopApp` + Home, so the system starts the home activity once.

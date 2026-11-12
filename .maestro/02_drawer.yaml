@@ -1,0 +1,16 @@
+appId: dev.tiny.launcher
+name: "cp-2 Drawer: every launchable app is listed and launches"
+tags:
+  - cp-2
+---
+- runFlow: subflows/open_home.yaml
+- scrollUntilVisible:
+    element: "Settings"
+    direction: DOWN
+- tapOn: "Settings"
+# Settings is in front: the home screen is gone
+- extendedWaitUntil:
+    notVisible: "Icons: .*"
+    timeout: 5000
+- pressKey: Home
+- assertVisible: "Icons: .*"

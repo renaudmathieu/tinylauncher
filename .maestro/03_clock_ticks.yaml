@@ -1,0 +1,13 @@
+appId: dev.tiny.launcher
+name: "cp-3 Sync: the clock follows TIME_TICK"
+tags:
+  - cp-3
+  - slow
+---
+- runFlow: subflows/open_home.yaml
+- copyTextFrom: "\\d{2}:\\d{2}"
+# TIME_TICK arrives every minute: wait a bit more than one minute for the text to change
+- extendedWaitUntil:
+    notVisible: ${maestro.copiedText}
+    timeout: 65000
+- assertVisible: "\\d{2}:\\d{2}"

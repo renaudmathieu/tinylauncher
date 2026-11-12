@@ -1,0 +1,22 @@
+appId: dev.tiny.launcher
+name: "cp-5 Widgets: pick, bind and host a widget"
+# Override the widget with: -e WIDGET="Chrome Dino"
+tags:
+  - cp-5
+---
+- runFlow: subflows/open_home.yaml
+- tapOn: "\\+ Widget"
+- scrollUntilVisible:
+    element: ${WIDGET || "Calendar month view"}
+    direction: DOWN
+- tapOn: ${WIDGET || "Calendar month view"}
+# First bind: the system asks the user (ACTION_APPWIDGET_BIND)
+- runFlow:
+    when:
+      visible: "Create"
+    commands:
+      - tapOn: "Create"
+- extendedWaitUntil:
+    notVisible: "\\+ Widget"
+    timeout: 5000
+- assertVisible: "\\d{2}:\\d{2}"
